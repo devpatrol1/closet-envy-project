@@ -1416,7 +1416,7 @@ a[class*=card]:hover .title {
 /*# sourceMappingURL=ui.css.map */
 
 
-/* ================ CUSTOM BUTTONS ================== */
+/* ======================================= CUSTOM BUTTONS ====================================== */
 .btn-custom1 {
   color: #fff;
   background-color: #599936;
@@ -1437,7 +1437,6 @@ a[class*=card]:hover .title {
   background-color: #5EB52E;
   border-color: #10a52e;
 }
-
 
 .btn-custom1-light {
   color: #fff;
@@ -1460,7 +1459,6 @@ a[class*=card]:hover .title {
   border-color: #529A2A;
 }
 
-
 .btn-outline-custom1 {
   color: #599936;
   border-color: #599936;
@@ -1479,3 +1477,4 @@ a[class*=card]:hover .title {
   background-color: #599936;
   border-color: #599936;
 }
+
