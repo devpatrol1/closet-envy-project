@@ -7,8 +7,8 @@ $(document).ready(function() {
 
     /* ///////////////////////////////////////
 
-    THESE FOLLOWING SCRIPTS ONLY FOR BASIC USAGE, 
-    For sliders, interactions and other
+    THE FOLLOWING SCRIPTS ARE ONLY FOR BASIC USAGE
+    (For sliders, interactions, etc.)
 
     */ ///////////////////////////////////////
     
@@ -58,3 +58,7 @@ $(document).ready(function() {
 }); 
 // jquery end
 
+// Fade out for django messages
+setTimeout(function(){
+    $('#message').fadeout('slow')
+}, 4000);
