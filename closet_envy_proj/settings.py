@@ -12,19 +12,26 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
+import os
+import dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+# Use .env locally only
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1ncl%kn%2e%@t_tvas^v=+al=y1jixxg36^09(6x*_2!fams6j'
 # SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -131,8 +138,8 @@ MESSAGE_TAGS = {
 # SMTP configuration for Email
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587' #port for all gmail accounts
-EMAIL_HOST_USER = 'devpatrol007@gmail.com'
-EMAIL_HOST_PASSWORD = 'uulx tjed mphq twxu'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 
