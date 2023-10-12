@@ -1,0 +1,11 @@
+{% autoescape off %}
+
+Hi {{ user.first_name }},
+
+Your order (below) has been received and is being processed.  We will send you another email when the products in your order are shipped.
+
+Order Number: {{ order.order_number }}
+
+Thanks again!
+
+{% endautoescape %}
