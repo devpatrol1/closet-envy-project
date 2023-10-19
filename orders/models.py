@@ -50,6 +50,9 @@ class Order(models.Model):
     
     def full_address(self):
         return f'{self.address_line_1} {self.address_line_2}'
+    
+    def full_ship_address(self):
+        return f'{self.address_line_1} {self.address_line_2} {self.city}, {self.state} {self.zip_code}'
 
     def __str__(self):
         return self.last_name
