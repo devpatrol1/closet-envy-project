@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
+from import_export.formats.base_formats import CSV, XLSX
 import os
 import dotenv
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,6 +51,9 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'admin_honeypot',
+    'cities_light',
+    'import_export',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -91,12 +96,30 @@ WSGI_APPLICATION = 'closet_envy_proj.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# Option #!
+# DATABASES = {'default': dj_database_url.config(default=os.environ['DATABASE_URL'], engine='django_cockroachdb')}
+
+# Option #2
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django_cockroachdb',
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PSWD'),
+#         'HOST': os.environ.get('DB_HOST'),
+#         'PORT': '26257',
+#         'OPTIONS': {
+#             'sslmode': 'verify-full',
+#         },
+#     },
+# }
 
 
 # Password validation
@@ -125,21 +148,66 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Static & Media files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR /'static'
-STATICFILES_DIRS = [
-   'closet_envy_proj/static/',
-]
+# https://docs.djangoproject.com/en/4.2/topics/files/
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR /'media'
+# #Local Settings
+# STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR /'static'
+# STATICFILES_DIRS = [
+#    'closet_envy_proj/static/',
+# ]
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR /'media'
+
+#AWS S3 static & media files configuration
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = 'us-west-1'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME)
+STATICFILES_LOCATION = 'static'
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+STATIC_ROOT = 'https://%s/%s/static/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+MEDIA_ROOT = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/{MEDIAFILES_LOCATION}/'
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+			"bucket_name": AWS_STORAGE_BUCKET_NAME,
+			"region_name": AWS_S3_REGION_NAME,
+			"signature_version": AWS_S3_SIGNATURE_VERSION,
+			"custom_domain": AWS_S3_CUSTOM_DOMAIN,
+            "location": MEDIAFILES_LOCATION,
+            "default_acl": 'public-read',
+            "object_parameters": {'CacheControl': 'max-age=86400'},
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+			"location": STATICFILES_LOCATION
+        },
+    },
+}
+
 
 
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
+
+
+# File formats allowed for imports
+IMPORT_FORMATS = [CSV, XLSX]
+
+
+# FOR CITIES LIGHT, INCLUDE US ONLY
+CITIES_LIGHT_INCLUDE_COUNTRIES = ['US']
 
 
 # SMTP configuration for Email
