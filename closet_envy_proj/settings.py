@@ -15,7 +15,7 @@ from django.contrib.messages import constants as messages
 from import_export.formats.base_formats import CSV, XLSX
 import os
 import dotenv
-import dj_database_url
+import django_heroku
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,8 +33,8 @@ if os.path.isfile(dotenv_file):
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECURITY WARNING: don't run with debug turned on in production!
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = False
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'admin_honeypot',
-    'cities_light',
     'import_export',
     'storages',
 ]
@@ -97,29 +96,25 @@ WSGI_APPLICATION = 'closet_envy_proj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-# Option #!
-# DATABASES = {'default': dj_database_url.config(default=os.environ['DATABASE_URL'], engine='django_cockroachdb')}
-
-# Option #2
+# #Local DB
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django_cockroachdb',
-#         'NAME': os.environ.get('DB_NAME'),
-#         'USER': os.environ.get('DB_USER'),
-#         'PASSWORD': os.environ.get('DB_PSWD'),
-#         'HOST': os.environ.get('DB_HOST'),
-#         'PORT': '26257',
-#         'OPTIONS': {
-#             'sslmode': 'verify-full',
-#         },
-#     },
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 # }
+
+#Elephant SQL DB
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PSWD'],
+        'HOST': os.environ['DB_HOST'],
+        'PORT': os.environ['DB_PORT'],
+    },
+}
 
 
 # Password validation
@@ -196,7 +191,6 @@ STORAGES = {
 }
 
 
-
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
@@ -207,7 +201,7 @@ IMPORT_FORMATS = [CSV, XLSX]
 
 
 # FOR CITIES LIGHT, INCLUDE US ONLY
-CITIES_LIGHT_INCLUDE_COUNTRIES = ['US']
+# CITIES_LIGHT_INCLUDE_COUNTRIES = ['US']
 
 
 # SMTP configuration for Email
@@ -223,3 +217,6 @@ EMAIL_USE_TLS = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.Account'
+
+# Activate Django-Heroku
+django_heroku.settings(locals())
