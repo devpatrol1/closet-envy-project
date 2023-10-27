@@ -15,7 +15,6 @@ from django.contrib.messages import constants as messages
 from import_export.formats.base_formats import CSV, XLSX
 import os
 import dotenv
-import django_heroku
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -217,6 +216,3 @@ EMAIL_USE_TLS = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.Account'
-
-# Activate Django-Heroku
-django_heroku.settings(locals())
