@@ -52,3 +52,8 @@ coverage.xml
 # celery beat schedule file
 celerybeat-schedule
 .env
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

@@ -13,5 +13,3 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'closet_envy_proj.settings')
 
 application = get_wsgi_application()
-
-app = application #added for Vercel deployment
