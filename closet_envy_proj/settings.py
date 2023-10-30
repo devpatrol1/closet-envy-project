@@ -32,7 +32,8 @@ if os.path.isfile(dotenv_file):
 # SECURITY WARNING: keep the secret key used in production secret AND don't run with debug turned on in production!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = os.environ.get('DEBUG')
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['closetenvy-env.eba-nkptuakx.us-west-2.elasticbeanstalk.com']
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
